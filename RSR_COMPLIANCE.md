@@ -1,6 +1,6 @@
 # RSR Compliance Assessment
 
-**SPDX-License-Identifier: MIT OR AGPL-3.0-or-later**
+**SPDX-License-Identifier: MPL-2.0-or-later
 
 **Project**: vext (Rhodium Standard Edition of irker)
 **Assessment Date**: 2025-01-01
@@ -392,7 +392,7 @@ Questions about RSR compliance:
 
 All source files include:
 ```
-SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+SPDX-License-Identifier: MPL-2.0-or-later
 ```
 
 ### Appendix C: Compliance Evidence

@@ -1,4 +1,4 @@
-; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+; SPDX-License-Identifier: MPL-2.0-or-later
 ; ECOSYSTEM.scm - Project ecosystem relationships for vext
 ; Media type: application/vnd.ecosystem+scm
 

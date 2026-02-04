@@ -1,6 +1,6 @@
 # Changelog
 
-**SPDX-License-Identifier: MIT OR AGPL-3.0-or-later**
+**SPDX-License-Identifier: MPL-2.0-or-later
 
 All notable changes to vext will be documented in this file.
 

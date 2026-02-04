@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+# SPDX-License-Identifier: MPL-2.0-or-later
 # AI Training Policy for vext
 # See: https://site.spawning.ai/spawning-ai-txt
 
@@ -31,5 +31,5 @@ Contact: https://github.com/hyperpolymath/vext
 Operator-Contact: mailto:ai-policy@hyperpolymath.dev
 
 # Philosophy
-Philosophy: https://github.com/hyperpolymath/palimpsest-licence
+Philosophy: https://github.com/hyperpolymath/palimpsest-license
 Note: We encourage AI assistance in development while respecting copyleft principles

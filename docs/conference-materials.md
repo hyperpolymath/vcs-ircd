@@ -1,6 +1,6 @@
 # Conference Materials - vext
 
-**SPDX-License-Identifier: MIT OR AGPL-3.0-or-later**
+**SPDX-License-Identifier: MPL-2.0-or-later
 
 This document contains talk proposals, abstracts, and presentation materials for vext (Rhodium Standard Edition of irker).
 

@@ -1,6 +1,6 @@
 # Maintainers
 
-**SPDX-License-Identifier: MIT OR AGPL-3.0-or-later**
+**SPDX-License-Identifier: MPL-2.0-or-later
 
 This document lists the maintainers of the vext project and their areas of responsibility.
 

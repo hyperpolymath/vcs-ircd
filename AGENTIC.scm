@@ -1,4 +1,4 @@
-; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+; SPDX-License-Identifier: MPL-2.0-or-later
 ; AGENTIC.scm - AI agent instructions for vext
 ; Media type: application/vnd.agentic+scm
 

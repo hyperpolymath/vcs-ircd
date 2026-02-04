@@ -1,6 +1,6 @@
 # Tri-Perimeter Contribution Framework: A Graduated Trust Model for Open Source Governance
 
-**SPDX-License-Identifier: MIT OR AGPL-3.0-or-later**
+**SPDX-License-Identifier: MPL-2.0-or-later
 
 **Status**: Draft
 **Target Venue**: CHI, CSCW, OpenSym
