@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+# SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
 # Containerfile for vext
 # Build: podman build -t vext .
 # Run: podman run -p 6659:6659 vext
@@ -26,7 +26,7 @@ FROM cgr.dev/chainguard/wolfi-base:latest
 # OCI Image Spec labels
 LABEL org.opencontainers.image.source="https://github.com/hyperpolymath/vext"
 LABEL org.opencontainers.image.description="High-performance IRC notification daemon for version control systems"
-LABEL org.opencontainers.image.licenses="MIT OR AGPL-3.0-or-later"
+LABEL org.opencontainers.image.licenses="MIT OR PMPL-1.0-or-later"
 LABEL org.opencontainers.image.vendor="Hyperpolymath"
 LABEL org.opencontainers.image.title="vext"
 LABEL org.opencontainers.image.version="1.0.0"

@@ -104,8 +104,8 @@ Silver level adds automated compliance checking, advanced documentation, dual li
 - Command-line interface with detailed reporting
 
 **Palimpsest Dual Licensing**:
-- MIT OR AGPL-3.0-or-later
-- Clear SPDX identifier: `SPDX-License-Identifier: MIT OR AGPL-3.0-or-later`
+- MIT OR PMPL-1.0-or-later
+- Clear SPDX identifier: `SPDX-License-Identifier: MIT OR PMPL-1.0-or-later`
 - Comprehensive LICENSE file explaining both options
 - Guidance on when to choose each license
 - Patent grants and trademark notices

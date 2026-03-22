@@ -57,7 +57,7 @@ jobs:
           	arch = x86_64
           	arch = aarch64
           	license = MIT
-          	license = AGPL-3.0-or-later
+          	license = PMPL-1.0-or-later
           	makedepends = cargo
           	makedepends = rust
           	depends = gcc-libs

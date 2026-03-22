@@ -263,5 +263,5 @@ See `.migration/PYTHON_TO_RUST_RESCRIPT.md` for migration details.
 
 ## License
 
-- **SPDX Identifier**: `MIT OR AGPL-3.0-or-later`
+- **SPDX Identifier**: `MIT OR PMPL-1.0-or-later`
 - **Style**: Palimpsest dual licensing

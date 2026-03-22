@@ -125,7 +125,7 @@ The vext project represents a modernized, community-driven fork of irker (by Eri
 
 Our team implements the Tri-Perimeter Contribution Framework (TPCF), a graduated trust model that welcomes community contributions while maintaining project security and quality. We've achieved Rhodium Standard Repository (RSR) Silver compliance, demonstrating excellence in documentation, security policies (RFC 9116), reproducible builds (Nix), and automated compliance verification.
 
-The project uses Palimpsest dual licensing (MIT OR AGPL-3.0-or-later) to support both permissive and copyleft use cases, and maintains backward compatibility with the original irker while adding modern features like comprehensive testing, CI/CD automation, and detailed operational guides.
+The project uses Palimpsest dual licensing (MIT OR PMPL-1.0-or-later) to support both permissive and copyleft use cases, and maintains backward compatibility with the original irker while adding modern features like comprehensive testing, CI/CD automation, and detailed operational guides.
 
 ## 🖼️ Slide Assets
 

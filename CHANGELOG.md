@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - RSR (Rhodium Standard Repository) compliance framework
 - Comprehensive documentation suite (README, INSTALLATION, USAGE, FEATURES)
-- Palimpsest dual licensing (MIT OR AGPL-3.0-or-later)
+- Palimpsest dual licensing (MIT OR PMPL-1.0-or-later)
 - Tri-Perimeter Contribution Framework (TPCF) governance
 - RFC 9116 compliant `.well-known/security.txt`
 - AI training policy (`.well-known/ai.txt`)
@@ -166,7 +166,7 @@ We avoid breaking changes whenever possible. When necessary, they are:
 
 **1.0.0**:
 - Repository rename: irker → vext
-- License change: BSD-2-Clause → MIT OR AGPL-3.0-or-later (Palimpsest)
+- License change: BSD-2-Clause → MIT OR PMPL-1.0-or-later (Palimpsest)
   - Note: Both are permissive; users can choose MIT for backward compatibility
 
 ## Contribution Credits

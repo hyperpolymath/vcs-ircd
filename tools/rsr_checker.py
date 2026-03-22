@@ -2,7 +2,7 @@
 """
 Rhodium Standard Repository (RSR) Compliance Checker
 Version: 2.0
-SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
 
 Automated compliance verification for RSR Bronze, Silver, Gold, and Platinum levels.
 """

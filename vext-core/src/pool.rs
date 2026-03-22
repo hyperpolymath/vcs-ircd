@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+// SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
 //! Connection pool management
 //!
 //! Manages multiple IRC connections per server with automatic scaling.
