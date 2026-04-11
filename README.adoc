@@ -1,4 +1,20 @@
-= vext - the high-performance IRC notification daemon for version control systems
+= vcs-ircd — VCS IRC Notification Daemon
+// Formerly named "vext". Renamed to avoid confusion with the Vext
+// cryptographic verification protocol in burble/. See disambiguation below.
+
+[WARNING]
+====
+*Name disambiguation* — two things were called "vext". They are unrelated.
+
+* *You are here:* `vcs-ircd` (formerly `vext`) — a *pooled IRC notification daemon* for
+  VCS events (Git push, commit, PR). Rust/Tokio. Nothing to do with cryptography.
+* *Not here:* the *Vext verification protocol* in Burble — BLAKE3 hash-chain feed
+  integrity for voice/chat. Lives at
+  `burble/server/lib/burble/verification/vext.ex`.
+
+If you want the verification protocol → go to the `burble` repo. +
+If you want to send Git commit notifications to IRC → you are in the right place.
+====
 
 image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[MPL-2.0-or-later,link="https://opensource.org/licenses/MPL-2.0"]
 image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]

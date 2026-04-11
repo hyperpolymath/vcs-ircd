@@ -1,0 +1,64 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2024-2026 Jonathan D.A. Jewell (hyperpolymath)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ⚠  DISAMBIGUATION — READ THIS FIRST
+// ══════════════════════════════════════════════════════════════════════════════
+//
+// This repo is named vcs-ircd (GitHub: hyperpolymath/vcs-ircd).
+// The local directory may still read "vext" — that is a stale path artefact
+// from the rename; the canonical name is vcs-ircd.
+//
+// TWO THINGS WERE CALLED "VEXT". THEY ARE COMPLETELY UNRELATED.
+//
+//  ┌─ YOU ARE HERE ─────────────────────────────────────────────────────────┐
+//  │  vcs-ircd  (formerly: vext)                                            │
+//  │  A pooled IRC notification daemon for version-control systems.         │
+//  │  Rust async daemon (Tokio). Inspired by irker (Eric S. Raymond).       │
+//  │  Sends commit/push notifications from Git repos to IRC channels.       │
+//  │  Has nothing to do with cryptographic verification.                    │
+//  │                                                                        │
+//  │  Repo:  github.com/hyperpolymath/vcs-ircd                              │
+//  │  Home:  developer-ecosystem/satellites/git-tools/vcs-ircd              │
+//  └────────────────────────────────────────────────────────────────────────┘
+//
+//  ┌─ NOT HERE — WRONG PLACE IF THIS IS WHAT YOU WANT ─────────────────────┐
+//  │  Vext (verification protocol)                                          │
+//  │  A cryptographic feed-integrity protocol used by Burble.               │
+//  │  BLAKE3 hash chains proving text feeds are chronological, complete,    │
+//  │  uninjected, and attributable. Nothing to do with IRC or VCS.          │
+//  │                                                                        │
+//  │  Lives at:  burble/server/lib/burble/verification/vext.ex              │
+//  │             burble/server/lib/burble/verification/vext_groove.ex       │
+//  └────────────────────────────────────────────────────────────────────────┘
+//
+// If you landed here looking for the Vext verification protocol → go to burble.
+// If you landed here looking for the IRC VCS notifier → you are in the right place.
+//
+// ══════════════════════════════════════════════════════════════════════════════
+
+[identity]
+name        = "vcs-ircd"
+formerly    = "vext"
+kind        = "satellite"
+parent-repo = "developer-ecosystem"
+path        = "satellites/git-tools/vcs-ircd"
+github      = "hyperpolymath/vcs-ircd"
+
+[purpose]
+summary = "Pooled IRC notification daemon for VCS events (Git push, commit, PR)"
+tech    = "Rust (Tokio async), connection pooling, TLS, rate-limiting"
+origin  = "Inspired by irker (ESR); modernised rewrite with async I/O"
+
+[disambiguation]
+this-is-not = "The Vext cryptographic verification protocol"
+that-lives-at = "burble/server/lib/burble/verification/vext.ex"
+
+[invariants]
+// Critical rules for AI agents working in this repo
+rules = [
+  "Do NOT confuse this with the Vext feed-verification protocol in burble",
+  "The local directory may still be named 'vext' — the canonical name is vcs-ircd",
+  "This is an IRC daemon. It does not do cryptographic verification of anything",
+  "Parent: developer-ecosystem satellite. Push to github.com/hyperpolymath/vcs-ircd",
+]
