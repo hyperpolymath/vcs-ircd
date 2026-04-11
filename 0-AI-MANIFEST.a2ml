@@ -9,7 +9,7 @@
 // The local directory may still read "vext" — that is a stale path artefact
 // from the rename; the canonical name is vcs-ircd.
 //
-// TWO THINGS WERE CALLED "VEXT". THEY ARE COMPLETELY UNRELATED.
+// THREE THINGS WERE CALLED "VEXT". THEY ARE ALL UNRELATED.
 //
 //  ┌─ YOU ARE HERE ─────────────────────────────────────────────────────────┐
 //  │  vcs-ircd  (formerly: vext)                                            │
@@ -22,18 +22,26 @@
 //  │  Home:  developer-ecosystem/satellites/git-tools/vcs-ircd              │
 //  └────────────────────────────────────────────────────────────────────────┘
 //
-//  ┌─ NOT HERE — WRONG PLACE IF THIS IS WHAT YOU WANT ─────────────────────┐
-//  │  Vext (verification protocol)                                          │
-//  │  A cryptographic feed-integrity protocol used by Burble.               │
-//  │  BLAKE3 hash chains proving text feeds are chronological, complete,    │
-//  │  uninjected, and attributable. Nothing to do with IRC or VCS.          │
+//  ┌─ NOT HERE — WRONG PLACE (CANONICAL SPEC) ──────────────────────────────┐
+//  │  Vext — Verifiable, Extensible Communications Protocol (THE SPEC)      │
+//  │  BLAKE3 hash chains proving feeds are chronological, complete,         │
+//  │  uninjected, and attributable. Idris2 proofs. Ed25519 signatures.      │
 //  │                                                                        │
-//  │  Lives at:  burble/server/lib/burble/verification/vext.ex              │
-//  │             burble/server/lib/burble/verification/vext_groove.ex       │
+//  │  Canonical spec: github.com/hyperpolymath/vext                         │
 //  └────────────────────────────────────────────────────────────────────────┘
 //
-// If you landed here looking for the Vext verification protocol → go to burble.
-// If you landed here looking for the IRC VCS notifier → you are in the right place.
+//  ┌─ NOT HERE — WRONG PLACE (PROTOCOL CONSUMER) ───────────────────────────┐
+//  │  Burble's Vext integration (implements the protocol above)             │
+//  │  Lives at: burble/server/lib/burble/verification/vext.ex               │
+//  └────────────────────────────────────────────────────────────────────────┘
+//
+//  ┌─ NOT HERE — WRONG PLACE (ISA COMPONENT) ───────────────────────────────┐
+//  │  vexometer/vext — named "vext" as in "vexed" (frustrated with LLMs)   │
+//  │  Part of the Irritation Surface Analyser. Also unrelated to this.      │
+//  └────────────────────────────────────────────────────────────────────────┘
+//
+// If you want the Vext protocol spec → github.com/hyperpolymath/vext
+// If you want the IRC VCS notifier → you are in the right place.
 //
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -51,13 +59,15 @@ tech    = "Rust (Tokio async), connection pooling, TLS, rate-limiting"
 origin  = "Inspired by irker (ESR); modernised rewrite with async I/O"
 
 [disambiguation]
-this-is-not = "The Vext cryptographic verification protocol"
-that-lives-at = "burble/server/lib/burble/verification/vext.ex"
+this-is-not      = "The Vext cryptographic verification protocol"
+protocol-spec    = "github.com/hyperpolymath/vext"
+protocol-impl    = "burble/server/lib/burble/verification/vext.ex"
+also-unrelated   = "vexometer/vext (ISA component named 'vext' = vexed, not verification)"
 
 [invariants]
 // Critical rules for AI agents working in this repo
 rules = [
-  "Do NOT confuse this with the Vext feed-verification protocol in burble",
+  "Do NOT confuse this with the Vext feed-verification protocol (spec: hyperpolymath/vext)",
   "The local directory may still be named 'vext' — the canonical name is vcs-ircd",
   "This is an IRC daemon. It does not do cryptographic verification of anything",
   "Parent: developer-ecosystem satellite. Push to github.com/hyperpolymath/vcs-ircd",
