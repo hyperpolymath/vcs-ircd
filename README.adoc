@@ -255,7 +255,7 @@ vext/
 │   │       ├── git.ts   # Git post-receive hook
 │   │       └── install.ts
 │   └── deno.json
-└── justfile             # Build automation
+└── Justfile             # Build automation
 ----
 
 == License
