@@ -1,6 +1,6 @@
 # justfile for vext
 # https://github.com/casey/just
-# SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
+# SPDX-License-Identifier: MIT OR MPL-2.0
 
 # Default recipe (show help)
 default:
@@ -251,7 +251,7 @@ ci: clean build lint test security
 info:
     @echo "Project: vext"
     @echo "Description: IRC notification daemon (Rhodium Standard Edition)"
-    @echo "License: MIT OR PMPL-1.0-or-later"
+    @echo "License: MIT OR MPL-2.0"
     @echo "Repository: https://github.com/Hyperpolymath/vext"
     @echo ""
     @echo "Components:"

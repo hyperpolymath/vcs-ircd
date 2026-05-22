@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
+// SPDX-License-Identifier: MIT OR MPL-2.0
 //! vext-send - CLI tool for sending notifications to vextd
 //!
 //! Sends JSON notifications to a running vextd daemon.

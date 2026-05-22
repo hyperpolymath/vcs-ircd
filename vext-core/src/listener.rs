@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
+// SPDX-License-Identifier: MIT OR MPL-2.0
 //! Notification listener
 //!
 //! TCP/UDP listener that accepts JSON notifications and relays them to IRC.

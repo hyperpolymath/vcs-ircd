@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR PMPL-1.0-or-later
+// SPDX-License-Identifier: MIT OR MPL-2.0
 //! vextd - IRC notification daemon for version control systems
 //!
 //! A high-performance, async IRC daemon that receives JSON notifications
