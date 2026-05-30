@@ -72,7 +72,7 @@ jobs:
           EOF
 
       - name: Publish to AUR
-        uses: KSXGitHub/github-actions-deploy-aur@a97f67e69b9709c3ffad393ca39b7c4ab1bfe6a5 # v3.0.1
+        uses: KSXGitHub/github-actions-deploy-aur@a97f56a8425a7a7f3b8c58607f769c69b089cadb # v3.0.1
         if: ${{ secrets.AUR_SSH_PRIVATE_KEY != '' }}
         with:
           pkgname: vext
@@ -126,7 +126,7 @@ jobs:
           sed -i "s/^sha256sums_aarch64=.*/sha256sums_aarch64=('$AARCH64_SUM')/" PKGBUILD-bin
 
       - name: Publish vext-bin to AUR
-        uses: KSXGitHub/github-actions-deploy-aur@a97f67e69b9709c3ffad393ca39b7c4ab1bfe6a5 # v3.0.1
+        uses: KSXGitHub/github-actions-deploy-aur@a97f56a8425a7a7f3b8c58607f769c69b089cadb # v3.0.1
         if: ${{ secrets.AUR_SSH_PRIVATE_KEY != '' }}
         with:
           pkgname: vext-bin
