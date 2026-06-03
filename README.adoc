@@ -1,4 +1,8 @@
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = vcs-ircd — VCS IRC Notification Daemon
+image:https://img.shields.io/badge/OpenSSF-Best_Practices-green?logo=openssourcesecurity[OpenSSF Best Practices,link="https://www.bestpractices.dev/en/projects/new?repo_url=https://github.com/hyperpolymath/vcs-ircd"]
+
 // Formerly named "vext". Renamed to avoid confusion with the Vext
 // cryptographic verification protocol. See disambiguation below.
 
@@ -18,7 +22,7 @@ If you want the verification protocol spec → go to `hyperpolymath/vext`. +
 If you want to send Git commit notifications to IRC → you are in the right place.
 ====
 
-image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[MPL-2.0-or-later,link="https://opensource.org/licenses/MPL-2.0"]
+image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[License: MPL-2.0,link="https://opensource.org/licenses/MPL-2.0"]
 image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]
 
 
@@ -260,9 +264,9 @@ vext/
 
 == License
 
-Dual-licensed under MIT OR MPL-2.0 (Palimpsest licensing).
+This project is licensed under the Mozilla Public License, v. 2.0. See the `LICENSE` file for details.
 
-Choose the license that works best for your use case.
+SPDX-License-Identifier: MPL-2.0
 
 == Credits
 
