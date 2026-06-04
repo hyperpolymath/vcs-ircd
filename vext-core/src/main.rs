@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: MIT OR MPL-2.0
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! vextd - IRC notification daemon for version control systems
 //!
 //! A high-performance, async IRC daemon that receives JSON notifications
