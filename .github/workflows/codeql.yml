@@ -3,15 +3,13 @@
 # Scans: GitHub Actions workflows (Rust not yet supported by CodeQL)
 
 name: "CodeQL"
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: '37 13 * * 0'
-
 # Estate guardrail: cancel superseded runs so re-pushes / rebased PR
 # updates do not pile up queued runs against the shared account-wide
 # Actions concurrency pool. Applied only to read-only check workflows
@@ -19,10 +17,7 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
-
 permissions: read-all
-
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -33,27 +28,23 @@ jobs:
       packages: read
       actions: read
       contents: read
-
     strategy:
       fail-fast: false
       matrix:
         include:
-        - language: actions
-          build-mode: none
-        # Note: Rust is not yet supported by CodeQL
-        # Python/Go are banned in this repo per RSR language policy
-
+          - language: actions
+            build-mode: none
+            # Note: Rust is not yet supported by CodeQL
+            # Python/Go are banned in this repo per RSR language policy
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v3.28.1
-      with:
-        languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v3.28.1
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v3.28.1
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v3.28.1
+        with:
+          category: "/language:${{matrix.language}}"
