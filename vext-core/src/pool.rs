@@ -67,12 +67,17 @@ impl ConnectionPool {
         &mut self,
         target: &IrcTarget,
     ) -> VextResult<Arc<Mutex<IrcConnection>>> {
-        let server_key = format!("{}:{}", target.server, target.port.unwrap_or(
-            if target.tls { 6697 } else { 6667 }
-        ));
+        let server_key = format!(
+            "{}:{}",
+            target.server,
+            target.port.unwrap_or(if target.tls { 6697 } else { 6667 })
+        );
 
         // Get or create server pool
-        let pool = self.pools.entry(server_key.clone()).or_insert_with(ServerPool::new);
+        let pool = self
+            .pools
+            .entry(server_key.clone())
+            .or_insert_with(ServerPool::new);
 
         // Try to find a healthy existing connection
         for conn in &pool.connections {
@@ -112,14 +117,7 @@ impl ConnectionPool {
             server_key, tls, nick
         );
 
-        let conn = IrcConnection::connect(
-            &target.server,
-            port,
-            tls,
-            &nick,
-            &self.config,
-        )
-        .await?;
+        let conn = IrcConnection::connect(&target.server, port, tls, &nick, &self.config).await?;
 
         let conn = Arc::new(Mutex::new(conn));
         pool.connections.push(conn.clone());
@@ -128,11 +126,7 @@ impl ConnectionPool {
     }
 
     /// Send a message to a target
-    pub async fn send_message(
-        &mut self,
-        target: &IrcTarget,
-        message: &str,
-    ) -> VextResult<()> {
+    pub async fn send_message(&mut self, target: &IrcTarget, message: &str) -> VextResult<()> {
         let conn = self.get_connection(target).await?;
         let mut guard = conn.lock().await;
 
@@ -157,7 +151,10 @@ impl ConnectionPool {
             for (i, conn) in pool.connections.iter().enumerate() {
                 let guard = conn.lock().await;
                 if guard.last_activity.elapsed() > idle_timeout {
-                    debug!("Connection {} to {} is idle, marking for removal", i, server);
+                    debug!(
+                        "Connection {} to {} is idle, marking for removal",
+                        i, server
+                    );
                     to_remove.push(i);
                 }
             }

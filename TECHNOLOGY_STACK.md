@@ -46,16 +46,15 @@ vext uses a hybrid architecture combining Rust for the high-performance daemon a
 
 | Crate | Version | Purpose |
 |-------|---------|---------|
-| `tokio` | 1.35 | Async runtime and I/O |
-| `irc` | 0.15 | IRC protocol implementation |
+| `tokio` | 1.52 | Async runtime and I/O |
 | `serde` | 1.0 | Serialization/deserialization |
 | `serde_json` | 1.0 | JSON parsing |
-| `toml` | 0.8 | TOML configuration files |
-| `clap` | 4.4 | Command-line argument parsing |
+| `toml` | 1.1 | TOML configuration files |
+| `clap` | 4.6 | Command-line argument parsing |
 | `tracing` | 0.1 | Structured logging |
-| `native-tls` | 0.2 | TLS support |
-| `trust-dns-resolver` | 0.23 | DNS resolution (SRV records) |
-| `thiserror` | 1.0 | Error type derivation |
+| `tokio-rustls` | 0.26 | TLS support (Rustls) |
+| `hickory-resolver` | 0.26 | DNS resolution (SRV records) |
+| `thiserror` | 2.0 | Error type derivation |
 | `anyhow` | 1.0 | Error handling |
 
 ### Deno Dependencies (vext-tools)

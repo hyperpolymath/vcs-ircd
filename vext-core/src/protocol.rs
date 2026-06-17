@@ -159,10 +159,7 @@ pub mod colors {
 }
 
 /// Format a commit message with optional colors
-pub fn format_commit_message(
-    notification: &Notification,
-    colors: ColorScheme,
-) -> String {
+pub fn format_commit_message(notification: &Notification, colors: ColorScheme) -> String {
     match colors {
         ColorScheme::None => notification.privmsg.clone(),
         ColorScheme::Mirc => format_mirc_message(notification),
@@ -182,7 +179,11 @@ fn format_mirc_message(notification: &Notification) -> String {
     }
 
     if let Some(ref commit) = notification.commit {
-        let short = if commit.len() > 7 { &commit[..7] } else { commit };
+        let short = if commit.len() > 7 {
+            &commit[..7]
+        } else {
+            commit
+        };
         parts.push(format!("{}{}{}", colors::GREY, short, colors::RESET));
     }
 
