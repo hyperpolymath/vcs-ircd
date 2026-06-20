@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: MPL-2.0-or-later
 name: Language Policy Enforcement
-on: [push, pull_request]
+on:
+  push:
+    branches: [main, master]
+  pull_request:
 # Estate guardrail: cancel superseded runs so re-pushes / rebased PR
 # updates do not pile up queued runs against the shared account-wide
 # Actions concurrency pool. Applied only to read-only check workflows
