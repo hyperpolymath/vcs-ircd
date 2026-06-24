@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT OR MPL-2.0
+# SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 # Containerfile for vext
 # Build: podman build -t vext .
 # Run: podman run -p 6659:6659 vext

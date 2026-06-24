@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT OR MPL-2.0
+# SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 # Nickel configuration for vext
 # Export to TOML: nickel export --format toml config.ncl > vext.toml
 
