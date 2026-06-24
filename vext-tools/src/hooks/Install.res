@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR MPL-2.0
+// SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 // vext hook installer
 // Installs git hooks for vext notifications.
 

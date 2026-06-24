@@ -1,6 +1,6 @@
 # justfile for vext
 # https://github.com/casey/just
-# SPDX-License-Identifier: MIT OR MPL-2.0
+# SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 
 # Default recipe (show help)
 default:

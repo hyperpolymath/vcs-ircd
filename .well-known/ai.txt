@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MPL-2.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # AI Training Policy for vext
 # See: https://site.spawning.ai/spawning-ai-txt
 
