@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT OR MPL-2.0
+# SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 # Mustfile - Required conditions and invariants for vext
 # Companion to justfile - defines what MUST be true
 # See: https://github.com/hyperpolymath/mustfile

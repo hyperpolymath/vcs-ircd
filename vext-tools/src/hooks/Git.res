@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR MPL-2.0
+// SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 // vext Git post-receive hook
 // Reads pushed refs from stdin and sends notifications to vextd.
 

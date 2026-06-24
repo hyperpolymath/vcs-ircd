@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR MPL-2.0
+// SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 // ReScript bindings for Deno standard library (@std/*)
 
 // @std/cli/parse-args
