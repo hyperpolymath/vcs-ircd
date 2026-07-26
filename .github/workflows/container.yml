@@ -6,6 +6,7 @@ on:
       - 'v*'
   workflow_dispatch:
 permissions: read-all
+  actions: read
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
