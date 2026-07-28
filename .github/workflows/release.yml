@@ -11,6 +11,7 @@ on:
         description: 'Release tag (e.g., v1.0.0)'
         required: true
 permissions: read-all
+  actions: read
 env:
   CARGO_TERM_COLOR: always
   RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
