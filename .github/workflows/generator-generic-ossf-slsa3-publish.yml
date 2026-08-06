@@ -17,7 +17,6 @@ on:
   release:
     types: [created]
 permissions: read-all
-  actions: read
 jobs:
   build:
     runs-on: ubuntu-latest
