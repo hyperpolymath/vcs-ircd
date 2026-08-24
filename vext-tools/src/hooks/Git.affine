@@ -1,7 +1,400 @@
 // SPDX-License-Identifier: MPL-2.0
-// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
-// Ported via Harvard Engine bulk-processor
+// Ported via Harvard Engine (Semantic pass)
 
 module Git;
 
-// TODO: Complete semantic implementation
+// SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
+// vext Git post-receive hook
+// Reads pushed refs from stdin and sends notifications to vextd.
+
+open Deno
+
+// Types
+struct commitInfo { {
+  hash: string,
+  shortHash: string,
+  author: string,
+  authorEmail: string,
+  subject: string,
+  body: string,
+  timestamp: string,
+}
+
+struct refUpdate { {
+  oldRef: string,
+  newRef: string,
+  refName: string,
+}
+
+struct notification { {
+  to: array<string>,
+  privmsg: string,
+  project: option<string>,
+  branch: option<string>,
+  commit: option<string>,
+  author: option<string>,
+  url: option<string>,
+}
+
+// Configuration from environment
+struct config { {
+  mutable server: string,
+  mutable targets: array<string>,
+  mutable project: option<string>,
+  mutable baseUrl: option<string>,
+  mutable maxCommits: int,
+  mutable colors: bool,
+}
+
+fn defaultConfig = (): config => {
+  fn server = Env.get("VEXT_SERVER")->Option.getOr("127.0.0.1:6659")
+  fn targetsStr = Env.get("VEXT_TARGETS")->Option.getOr("")
+  fn targets = targetsStr->String.split(",")->Array.filter(s => s != "")
+  fn project = switch Env.get("VEXT_PROJECT") {
+  | Some(p) => Some(p)
+  | None => Env.get("GL_PROJECT_PATH")
+  }
+  fn baseUrl = Env.get("VEXT_URL")
+  fn maxCommits = Env.get("VEXT_MAX_COMMITS")
+    ->Option.flatMap(s => Int.fromString(s))
+    ->Option.getOr(5)
+  fn colors = Env.get("VEXT_COLORS") != Some("false")
+
+  {server, targets, project, baseUrl, maxCommits, colors}
+}
+
+// Run git command and get output
+fn runGit = async (args: array<string>): string => {
+  fn cmd = Command.make("git", {
+    args,
+    stdout: "piped",
+    stderr: "piped",
+  })
+  fn output = await cmd->Command.output
+  if !output.success {
+    Js.Exn.raiseError(`git ${args->Array.join(" ")} failed`)
+  }
+  fn decoder = TextDecoder.make()
+  decoder->TextDecoder.decode(output.stdout)->String.trim
+}
+
+// Get commit info for a hash
+fn getCommitInfo = async (hash: string): commitInfo => {
+  fn format = "%H%n%h%n%an%n%ae%n%s%n%b%n%aI"
+  fn output = await runGit(["log", "-1", `--format=${format}`, hash])
+  fn lines = output->String.split("\n")
+
+  {
+    hash: lines->Array.getUnsafe(0),
+    shortHash: lines->Array.getUnsafe(1),
+    author: lines->Array.getUnsafe(2),
+    authorEmail: lines->Array.getUnsafe(3),
+    subject: lines->Array.getUnsafe(4),
+    body: lines->Array.slice(~start=5, ~end=-1)->Array.join("\n"),
+    timestamp: lines->Array.getUnsafe(Array.length(lines) - 1),
+  }
+}
+
+// Get commits between two refs
+fn getCommitsBetween = async (config: config, oldRef: string, newRef: string): array<string> => {
+  fn nullRef = "0000000000000000000000000000000000000000"
+
+  // Handle new branch
+  if oldRef == nullRef {
+    fn output = await runGit([
+      "rev-list",
+      `--max-count=${config.maxCommits->Int.toString}`,
+      newRef,
+    ])
+    output->String.split("\n")->Array.filter(s => s != "")
+  } else if newRef == nullRef {
+    // Handle deleted branch
+    []
+  } else {
+    fn output = await runGit([
+      "rev-list",
+      `--max-count=${config.maxCommits->Int.toString}`,
+      `${oldRef}..${newRef}`,
+    ])
+    output->String.split("\n")->Array.filter(s => s != "")
+  }
+}
+
+// Extract branch name from ref
+fn extractBranchName = (refName: string): string => {
+  if refName->String.startsWith("refs/heads/") {
+    refName->String.sliceToEnd(~start=11)
+  } else if refName->String.startsWith("refs/tags/") {
+    "tag/" ++ refName->String.sliceToEnd(~start=10)
+  } else {
+    refName
+  }
+}
+
+// Format commit message
+fn formatCommitMessage = (commit: commitInfo, branch: string, project: option<string>): string => {
+  fn parts = []
+
+  switch project {
+  | Some(p) => parts->Array.push(`[${p}]`)->ignore
+  | None => ()
+  }
+
+  parts->Array.push(branch)->ignore
+  parts->Array.push(commit.shortHash)->ignore
+  parts->Array.push(commit.author ++ ":")->ignore
+  parts->Array.push(commit.subject)->ignore
+
+  parts->Array.join(" ")
+}
+
+// Send notification to vextd
+fn sendNotification = async (config: config, notification: notification): unit => {
+  fn payload = notification->Obj.magic->JSON.stringify ++ "\n"
+
+  try {
+    fn serverParts = config.server->String.split(":")
+    fn hostname = serverParts->Array.getUnsafe(0)
+    fn port = serverParts->Array.get(1)
+      ->Option.flatMap(Int.fromString)
+      ->Option.getOr(6659)
+
+    fn conn = await Net.connect({hostname, port})
+    fn encoder = TextEncoder.make()
+    fn _ = await conn->Net.write(encoder->TextEncoder.encode(payload))
+    conn->Net.close
+
+    Console.error(`[vext] Sent notification to ${config.server}`)
+  } catch {
+  | Js.Exn.Error(err) =>
+    fn msg = Js.Exn.message(err)->Option.getOr("unknown error")
+    Console.error(`[vext] Failed to send notification: ${msg}`)
+  }
+}
+
+// Process a ref update
+fn processRefUpdate = async (config: config, update: refUpdate): unit => {
+  if Array.length(config.targets) == 0 {
+    Console.error("[vext] No targets configured (set VEXT_TARGETS)")
+    return
+  }
+
+  fn branch = extractBranchName(update.refName)
+  fn nullRef = "0000000000000000000000000000000000000000"
+
+  // Handle branch deletion
+  if update.newRef == nullRef {
+    await sendNotification(config, {
+      to: config.targets,
+      privmsg: `Branch ${branch} deleted`,
+      project: config.project,
+      branch: Some(branch),
+      commit: None,
+      author: None,
+      url: None,
+    })
+    return
+  }
+
+  // Handle new branch
+  if update.oldRef == nullRef {
+    await sendNotification(config, {
+      to: config.targets,
+      privmsg: `New branch ${branch} created`,
+      project: config.project,
+      branch: Some(branch),
+      commit: None,
+      author: None,
+      url: None,
+    })
+  }
+
+  // Get commits
+  fn commits = await getCommitsBetween(config, update.oldRef, update.newRef)
+
+  if Array.length(commits) == 0 {
+    return
+  }
+
+  // Process each commit (most recent first)
+  fn reversed = commits->Array.toReversed
+  for i in 0 to Array.length(reversed) - 1 {
+    fn hash = reversed->Array.getUnsafe(i)
+    try {
+      fn commit = await getCommitInfo(hash)
+      fn message = formatCommitMessage(commit, branch, config.project)
+
+      fn url = switch config.baseUrl {
+      | Some(base) => Some(`${base}/commit/${commit.hash}`)
+      | None => None
+      }
+
+      await sendNotification(config, {
+        to: config.targets,
+        privmsg: message,
+        project: config.project,
+        branch: Some(branch),
+        commit: Some(commit.shortHash),
+        author: Some(commit.author),
+        url,
+      })
+    } catch {
+    | Js.Exn.Error(err) =>
+      fn msg = Js.Exn.message(err)->Option.getOr("unknown")
+      Console.error(`[vext] Failed to process commit ${hash}: ${msg}`)
+    }
+  }
+
+  // If there were more commits, note that
+  if Array.length(commits) >= config.maxCommits {
+    await sendNotification(config, {
+      to: config.targets,
+      privmsg: `... and more commits (showing last ${config.maxCommits->Int.toString})`,
+      project: config.project,
+      branch: Some(branch),
+      commit: None,
+      author: None,
+      url: None,
+    })
+  }
+}
+
+// Read ref updates from stdin
+fn readStdin = async (): array<refUpdate> => {
+  fn updates: array<refUpdate> = []
+  fn decoder = TextDecoder.make()
+  fn buffer = Js.TypedArray2.Uint8Array.fromLength(1024)
+  fn input = ref("")
+
+  try {
+    fn continue = ref(true)
+    while continue.contents {
+      fn n = await Stdin.stdin->Stdin.read(buffer)
+      switch n->Js.Nullable.toOption {
+      | None => continue := false
+      | Some(bytesRead) =>
+        fn slice = buffer->Js.TypedArray2.Uint8Array.slice(~start=0, ~end_=bytesRead)
+        input := input.contents ++ decoder->TextDecoder.decode(slice)
+      }
+    }
+  } catch {
+  | _ => () // stdin might not be available
+  }
+
+  // Parse ref updates
+  fn lines = input.contents->String.split("\n")
+  lines->Array.forEach(line => {
+    fn trimmed = line->String.trim
+    if trimmed != "" {
+      fn parts = trimmed->String.split(" ")
+      if Array.length(parts) >= 3 {
+        updates->Array.push({
+          oldRef: parts->Array.getUnsafe(0),
+          newRef: parts->Array.getUnsafe(1),
+          refName: parts->Array.getUnsafe(2),
+        })->ignore
+      }
+    }
+  })
+
+  updates
+}
+
+// Show help
+fn showHelp = () => {
+  Console.log(`vext git hook - Send commit notifications to IRC
+
+Usage: Git.res.mjs [options]
+
+When run as a git post-receive hook, reads ref updates from stdin.
+
+Options:
+  --server    vextd server address (default: 127.0.0.1:6659)
+  --to        IRC target URL (can specify multiple)
+  --project   Project name
+  --url       Base URL for commit links
+  --help      Show this help
+  --version   Show version
+
+Environment variables:
+  VEXT_SERVER      vextd server address
+  VEXT_TARGETS     Comma-separated IRC target URLs
+  VEXT_PROJECT     Project name
+  VEXT_URL         Base URL for commit links
+  VEXT_MAX_COMMITS Maximum commits to report (default: 5)
+`)
+}
+
+// Main entry point
+fn main = async () => {
+  fn config = defaultConfig()
+
+  // Simple arg parsing
+  fn args = Deno.args
+  fn showHelpFlag = args->Array.some(a => a == "--help" || a == "-h")
+  fn showVersion = args->Array.some(a => a == "--version" || a == "-V")
+
+  if showHelpFlag {
+    showHelp()
+    exit(0)
+  }
+
+  if showVersion {
+    Console.log("vext-hook 1.0.0")
+    exit(0)
+  }
+
+  // Parse CLI args for overrides
+  args->Array.forEachWithIndex((arg, i) => {
+    if arg == "--server" {
+      switch args->Array.get(i + 1) {
+      | Some(v) => config.server = v
+      | None => ()
+      }
+    }
+    if arg == "--to" {
+      switch args->Array.get(i + 1) {
+      | Some(v) => config.targets = [v]
+      | None => ()
+      }
+    }
+    if arg == "--project" {
+      switch args->Array.get(i + 1) {
+      | Some(v) => config.project = Some(v)
+      | None => ()
+      }
+    }
+    if arg == "--url" {
+      switch args->Array.get(i + 1) {
+      | Some(v) => config.baseUrl = Some(v)
+      | None => ()
+      }
+    }
+  })
+
+  // Read ref updates from stdin
+  fn updates = await readStdin()
+
+  if Array.length(updates) == 0 {
+    Console.error("[vext] No ref updates received from stdin")
+    exit(0)
+  }
+
+  // Process each ref update
+  for i in 0 to Array.length(updates) - 1 {
+    fn update = updates->Array.getUnsafe(i)
+    await processRefUpdate(config, update)
+  }
+}
+
+// Run main
+fn _ = main()->Promise.catch(err => {
+  fn msg = switch err {
+  | Js.Exn.Error(e) => Js.Exn.message(e)->Option.getOr("unknown")
+  | _ => "unknown error"
+  }
+  Console.error(`[vext] Fatal error: ${msg}`)
+  exit(1)
+  Promise.resolve()
+})
+
