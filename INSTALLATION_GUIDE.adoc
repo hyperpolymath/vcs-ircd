@@ -1,22 +1,21 @@
-<!--
-SPDX-License-Identifier: CC-BY-SA-4.0
-Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
--->
-# vext Installation Guide
+== vext Installation Guide
 
-## Prerequisites
+=== Prerequisites
 
-### System Requirements
+==== System Requirements
 
-- **Operating System**: Linux (Ubuntu, Debian, CentOS), macOS, or FreeBSD
-- **Python**: Version 2.7+ or 3.4+ (3.6+ recommended)
-- **Version Control Tools**: Git, Mercurial (optional), or Subversion (optional)
-- **Network**: Outbound TCP/UDP access to IRC server
-- **User Privileges**: Ability to create system users and install to `/usr/local` or `/opt`
+* *Operating System*: Linux (Ubuntu, Debian, CentOS), macOS, or FreeBSD
+* *Python*: Version 2.7+ or 3.4+ (3.6+ recommended)
+* *Version Control Tools*: Git, Mercurial (optional), or Subversion
+(optional)
+* *Network*: Outbound TCP/UDP access to IRC server
+* *User Privileges*: Ability to create system users and install to
+`+/usr/local+` or `+/opt+`
 
-### Required Tools
+==== Required Tools
 
-```bash
+[source,bash]
+----
 # Check Python installation
 python --version        # Should show 2.7+ or 3.4+
 python3 --version       # For Python 3
@@ -27,31 +26,34 @@ git --version
 # Optional: Check other VCS tools
 hg --version            # For Mercurial support
 svn --version           # For Subversion support
-```
+----
 
-### Network Requirements
+==== Network Requirements
 
-- **Outbound**: TCP/UDP port 6667-6697 (IRC servers, 6697 is typically TLS)
-- **Inbound**: TCP/UDP port 6659 (daemon listener, configurable)
-- **DNS**: Access to IRC server DNS records
-- **Firewall**: Allow bidirectional traffic with IRC servers
+* *Outbound*: TCP/UDP port 6667-6697 (IRC servers, 6697 is typically
+TLS)
+* *Inbound*: TCP/UDP port 6659 (daemon listener, configurable)
+* *DNS*: Access to IRC server DNS records
+* *Firewall*: Allow bidirectional traffic with IRC servers
 
-## Installation Methods
+=== Installation Methods
 
-### Method 1: From Source (Recommended for Development)
+==== Method 1: From Source (Recommended for Development)
 
-#### Step 1: Clone Repository
+===== Step 1: Clone Repository
 
-```bash
+[source,bash]
+----
 # Clone the vext repository
 git clone https://github.com/Hyperpolymath/vext.git
 cd vext
 git checkout main  # or latest stable branch
-```
+----
 
-#### Step 2: Create Virtual Environment (Optional but Recommended)
+===== Step 2: Create Virtual Environment (Optional but Recommended)
 
-```bash
+[source,bash]
+----
 # Create isolated Python environment
 python3 -m venv venv
 source venv/bin/activate  # On macOS/Linux
@@ -60,21 +62,23 @@ venv\Scripts\activate     # On Windows
 
 # Upgrade pip
 pip install --upgrade pip setuptools wheel
-```
+----
 
-#### Step 3: Install Dependencies
+===== Step 3: Install Dependencies
 
-```bash
+[source,bash]
+----
 # Install package and dependencies
 pip install -e .
 
 # Or with development dependencies
 pip install -e ".[dev,test]"
-```
+----
 
-#### Step 4: Verify Installation
+===== Step 4: Verify Installation
 
-```bash
+[source,bash]
+----
 # Check daemon installation
 irkerd --help
 
@@ -83,22 +87,24 @@ python -m irker.irkerhook --help
 
 # Test import
 python -c "import irker; print(irker.__version__)"
-```
+----
 
-#### Step 5: Create System User (Recommended)
+===== Step 5: Create System User (Recommended)
 
-```bash
+[source,bash]
+----
 # Create unprivileged user for daemon
 sudo useradd -r -s /bin/false -d /var/empty irker
 
 # Or on macOS
 sudo dscl . -create /Users/irker UserShell /usr/bin/false
 sudo dscl . -create /Users/irker RealName "IRC Notification Daemon"
-```
+----
 
-#### Step 6: Install as System Service
+===== Step 6: Install as System Service
 
-```bash
+[source,bash]
+----
 # Copy systemd service file
 sudo cp systemd/vext.service /etc/systemd/system/
 
@@ -127,13 +133,14 @@ sudo systemctl daemon-reload
 sudo systemctl enable vext
 sudo systemctl start vext
 sudo systemctl status vext
-```
+----
 
-### Method 2: Package Manager Installation
+==== Method 2: Package Manager Installation
 
-#### Ubuntu/Debian
+===== Ubuntu/Debian
 
-```bash
+[source,bash]
+----
 # Update package list
 sudo apt-get update
 
@@ -145,11 +152,12 @@ sudo apt-get install python3-dev git
 git clone https://github.com/Hyperpolymath/vext.git
 cd vext
 sudo python3 setup.py install
-```
+----
 
-#### CentOS/RHEL
+===== CentOS/RHEL
 
-```bash
+[source,bash]
+----
 # Install dependencies
 sudo yum install python36-devel git
 
@@ -157,11 +165,12 @@ sudo yum install python36-devel git
 git clone https://github.com/Hyperpolymath/vext.git
 cd vext
 sudo python36 setup.py install
-```
+----
 
-#### macOS (Homebrew)
+===== macOS (Homebrew)
 
-```bash
+[source,bash]
+----
 # If formula is available
 brew install vext
 
@@ -170,13 +179,14 @@ brew install python3
 git clone https://github.com/Hyperpolymath/vext.git
 cd vext
 pip3 install -e .
-```
+----
 
-### Method 3: Docker Container Deployment
+==== Method 3: Docker Container Deployment
 
-#### Create Dockerfile
+===== Create Dockerfile
 
-```dockerfile
+[source,dockerfile]
+----
 FROM python:3.9-slim
 
 # Install dependencies
@@ -202,11 +212,12 @@ EXPOSE 6659
 
 # Run daemon
 CMD ["irkerd", "--listen", "0.0.0.0", "--port", "6659"]
-```
+----
 
-#### Build and Run
+===== Build and Run
 
-```bash
+[source,bash]
+----
 # Build image
 docker build -t vext:latest .
 
@@ -223,21 +234,23 @@ docker logs -f vext-daemon
 
 # Stop container
 docker stop vext-daemon
-```
+----
 
-### Method 4: System-Wide Installation (Manual)
+==== Method 4: System-Wide Installation (Manual)
 
-#### Step 1: Create Installation Directory
+===== Step 1: Create Installation Directory
 
-```bash
+[source,bash]
+----
 # Create install directory
 sudo mkdir -p /opt/vext/{bin,lib,etc}
 sudo chown root:root /opt/vext
-```
+----
 
-#### Step 2: Copy Files
+===== Step 2: Copy Files
 
-```bash
+[source,bash]
+----
 # Copy daemon and scripts
 sudo cp irkerd /opt/vext/bin/
 sudo cp irkerhook.py /opt/vext/bin/
@@ -247,21 +260,23 @@ sudo cp -r irker/ /opt/vext/lib/
 sudo cp etc/vext.conf /opt/vext/etc/
 sudo chmod 640 /opt/vext/etc/vext.conf
 sudo chown root:irker /opt/vext/etc/vext.conf
-```
+----
 
-#### Step 3: Create Symlinks
+===== Step 3: Create Symlinks
 
-```bash
+[source,bash]
+----
 # Link executables to standard locations
 sudo ln -s /opt/vext/bin/irkerd /usr/local/bin/irkerd
 sudo ln -s /opt/vext/bin/irkerhook.py /usr/local/bin/irkerhook
-```
+----
 
-## Post-Installation Configuration
+=== Post-Installation Configuration
 
-### 1. Create Configuration File
+==== 1. Create Configuration File
 
-```bash
+[source,bash]
+----
 # Create vext configuration directory
 sudo mkdir -p /etc/vext
 sudo chown root:root /etc/vext
@@ -299,11 +314,12 @@ flood_limit = 1000
 EOF
 
 sudo chmod 640 /etc/vext/vext.conf
-```
+----
 
-### 2. Create Log Directory
+==== 2. Create Log Directory
 
-```bash
+[source,bash]
+----
 # Create log directory
 sudo mkdir -p /var/log/vext
 sudo chown irker:irker /var/log/vext
@@ -324,11 +340,12 @@ sudo tee /etc/logrotate.d/vext > /dev/null <<'EOF'
     endscript
 }
 EOF
-```
+----
 
-### 3. Configure Environment Variables
+==== 3. Configure Environment Variables
 
-```bash
+[source,bash]
+----
 # Create environment file
 sudo tee /etc/default/vext > /dev/null <<'EOF'
 # vext daemon environment configuration
@@ -348,15 +365,16 @@ ExecStart=/usr/local/bin/irkerd --listen $IRKERD_HOST --port $IRKERD_PORT
 EOF
 
 sudo systemctl daemon-reload
-```
+----
 
-## Repository-Specific Setup
+=== Repository-Specific Setup
 
-### Git Repository Hook Installation
+==== Git Repository Hook Installation
 
-#### Method 1: Server-Side Post-Receive Hook
+===== Method 1: Server-Side Post-Receive Hook
 
-```bash
+[source,bash]
+----
 # Navigate to bare repository
 cd /path/to/myproject.git
 
@@ -447,11 +465,12 @@ chmod +x hooks/post-receive
 
 # Verify
 ls -la hooks/post-receive
-```
+----
 
-#### Method 2: Using irkerhook.py
+===== Method 2: Using irkerhook.py
 
-```bash
+[source,bash]
+----
 # Copy irkerhook.py to repository
 cp /usr/local/bin/irkerhook /path/to/myproject.git/hooks/
 
@@ -461,11 +480,12 @@ chmod +x /path/to/myproject.git/hooks/irkerhook
 # Test the hook
 cd /path/to/myproject.git
 python hooks/irkerhook --help
-```
+----
 
-### Mercurial Repository Hook Installation
+==== Mercurial Repository Hook Installation
 
-```bash
+[source,bash]
+----
 # Add to .hg/hgrc
 cat >> /path/to/myrepo/.hg/hgrc << 'EOF'
 [hooks]
@@ -478,11 +498,12 @@ EOF
 
 # Verify
 hg logs
-```
+----
 
-### Subversion Repository Hook Installation
+==== Subversion Repository Hook Installation
 
-```bash
+[source,bash]
+----
 # Create hook script
 cat > /path/to/svnrepo/hooks/post-commit << 'EOF'
 #!/bin/bash
@@ -501,13 +522,14 @@ chmod +x /path/to/svnrepo/hooks/post-commit
 
 # Verify permissions
 ls -la /path/to/svnrepo/hooks/post-commit
-```
+----
 
-## Testing Installation
+=== Testing Installation
 
-### 1. Verify Daemon Installation
+==== 1. Verify Daemon Installation
 
-```bash
+[source,bash]
+----
 # Check daemon is executable
 which irkerd
 irkerd --version
@@ -518,11 +540,12 @@ irkerd --foreground --debug &
 DAEMON_PID=$!
 sleep 2
 kill $DAEMON_PID
-```
+----
 
-### 2. Test Daemon Connectivity
+==== 2. Test Daemon Connectivity
 
-```bash
+[source,bash]
+----
 # Start daemon
 irkerd --listen 127.0.0.1 --port 6659 --foreground &
 
@@ -533,11 +556,12 @@ echo '{"to":"irc://irc.libera.chat/test","privmsg":"Hello from vext"}' | \
 # Or with TCP
 echo '{"to":"irc://irc.libera.chat/test","privmsg":"Hello from vext"}' | \
   nc 127.0.0.1 6659
-```
+----
 
-### 3. Test Hook Execution
+==== 3. Test Hook Execution
 
-```bash
+[source,bash]
+----
 # Create test commit in Git repo
 cd /tmp
 mkdir test-repo
@@ -558,11 +582,12 @@ chmod +x .git/hooks/post-receive
 echo "test" > testfile.txt
 git add testfile.txt
 git commit -m "Test commit"
-```
+----
 
-### 4. System Service Testing
+==== 4. System Service Testing
 
-```bash
+[source,bash]
+----
 # Check service status
 sudo systemctl status vext
 
@@ -577,11 +602,12 @@ sudo systemctl status vext
 sudo netstat -tlnp | grep 6659
 # or
 sudo ss -tlnp | grep 6659
-```
+----
 
-### 5. End-to-End Testing
+==== 5. End-to-End Testing
 
-```bash
+[source,bash]
+----
 # 1. Start daemon
 sudo systemctl start vext
 
@@ -607,31 +633,34 @@ EOTEST
 
 # 3. Check daemon logs
 sudo journalctl -u vext -n 20
-```
+----
 
-## Troubleshooting Installation
+=== Troubleshooting Installation
 
-### Issue: Python Version Mismatch
+==== Issue: Python Version Mismatch
 
-```bash
+[source,bash]
+----
 # Solution: Use explicit Python version
 python3 setup.py install
 # or specify shebang in hook scripts
 #!/usr/bin/env python3
-```
+----
 
-### Issue: Permission Denied Errors
+==== Issue: Permission Denied Errors
 
-```bash
+[source,bash]
+----
 # Solution: Fix file permissions
 sudo chown -R irker:irker /var/log/vext
 sudo chmod 755 /var/log/vext
 sudo chmod 644 /var/log/vext/*.log
-```
+----
 
-### Issue: Port Already in Use
+==== Issue: Port Already in Use
 
-```bash
+[source,bash]
+----
 # Find process using port 6659
 sudo lsof -i :6659
 # or
@@ -640,11 +669,12 @@ sudo ss -tlnp | grep 6659
 # Change daemon port in systemd service
 sudo systemctl edit vext
 # Add: Environment="IRKERD_PORT=6660"
-```
+----
 
-### Issue: Cannot Connect to IRC Server
+==== Issue: Cannot Connect to IRC Server
 
-```bash
+[source,bash]
+----
 # Test network connectivity
 ping irc.libera.chat
 telnet irc.libera.chat 6667
@@ -655,11 +685,12 @@ sudo ufw status
 
 # Enable outbound IRC ports
 sudo ufw allow out 6667,6697/tcp
-```
+----
 
-### Issue: Daemon Not Starting
+==== Issue: Daemon Not Starting
 
-```bash
+[source,bash]
+----
 # Check for syntax errors
 python3 -m py_compile /usr/local/bin/irkerd
 
@@ -668,11 +699,12 @@ irkerd --foreground --debug
 
 # Check systemd logs
 sudo journalctl -u vext -n 50
-```
+----
 
-## Uninstallation
+=== Uninstallation
 
-```bash
+[source,bash]
+----
 # Stop service
 sudo systemctl stop vext
 sudo systemctl disable vext
@@ -694,12 +726,10 @@ sudo rm -rf /var/log/vext
 # Remove user
 sudo userdel irker
 sudo groupdel irker
-```
+----
 
-## Next Steps
+=== Next Steps
 
-After installation, see:
-- [USAGE_GUIDE.md](USAGE_GUIDE.md) for operating vext
-- [CONFIGURATION.md](CONFIGURATION.md) for detailed configuration options
-- [README.md](README.md) for project overview
-
+After installation, see: - USAGE_GUIDE.md for operating vext -
+CONFIGURATION.md for detailed configuration options - README.md for
+project overview
