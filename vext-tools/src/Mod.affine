@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MPL-2.0
-// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
-// Ported via Harvard Engine bulk-processor
+// Ported via Harvard Engine (Semantic pass)
 
 module Mod;
 
-// TODO: Complete semantic implementation
+// SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
+// vext-tools - CLI utilities and hooks for vext
+//
+// @module
+
+// Re-export hooks
+module Git = Git
+module Install = Install
+
