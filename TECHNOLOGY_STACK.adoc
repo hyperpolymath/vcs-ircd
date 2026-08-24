@@ -1,75 +1,71 @@
-<!--
-SPDX-License-Identifier: CC-BY-SA-4.0
-Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
--->
-# vext Technology Stack
+== vext Technology Stack
 
-## Overview
+=== Overview
 
-vext uses a hybrid architecture combining Rust for the high-performance daemon and Deno/TypeScript for developer-friendly hooks and tooling.
+vext uses a hybrid architecture combining Rust for the high-performance
+daemon and Deno/TypeScript for developer-friendly hooks and tooling.
 
-## Languages & Runtimes
+=== Languages & Runtimes
 
-### Rust (vext-core)
+==== Rust (vext-core)
 
-**Role**: High-performance IRC notification daemon
+*Role*: High-performance IRC notification daemon
 
-- **Version**: Rust 1.70+ (2021 edition)
-- **Runtime**: Native binary (no runtime dependencies)
-- **Build Tool**: Cargo
+* *Version*: Rust 1.70+ (2021 edition)
+* *Runtime*: Native binary (no runtime dependencies)
+* *Build Tool*: Cargo
 
-**Key Advantages**:
-- Memory safety without garbage collection
-- Zero-cost abstractions
-- Excellent async/await support via Tokio
-- Single binary deployment
-- Cross-compilation support
+*Key Advantages*: - Memory safety without garbage collection - Zero-cost
+abstractions - Excellent async/await support via Tokio - Single binary
+deployment - Cross-compilation support
 
-### TypeScript/Deno (vext-tools)
+==== TypeScript/Deno (vext-tools)
 
-**Role**: Hook scripts, CLI utilities, configuration tools
+*Role*: Hook scripts, CLI utilities, configuration tools
 
-- **Runtime**: Deno 1.40+
-- **Type Safety**: Full TypeScript with strict mode
-- **Permissions**: Explicit security permissions model
+* *Runtime*: Deno 1.40+
+* *Type Safety*: Full TypeScript with strict mode
+* *Permissions*: Explicit security permissions model
 
-**Key Advantages**:
-- Modern JavaScript/TypeScript runtime
-- Built-in TypeScript support (no transpilation step)
-- Secure by default (explicit permissions)
-- Single-file scripts with URL imports
-- Excellent cross-platform support
+*Key Advantages*: - Modern JavaScript/TypeScript runtime - Built-in
+TypeScript support (no transpilation step) - Secure by default (explicit
+permissions) - Single-file scripts with URL imports - Excellent
+cross-platform support
 
-## Core Dependencies
+=== Core Dependencies
 
-### Rust Dependencies (vext-core)
+==== Rust Dependencies (vext-core)
 
-| Crate | Version | Purpose |
-|-------|---------|---------|
-| `tokio` | 1.52 | Async runtime and I/O |
-| `serde` | 1.0 | Serialization/deserialization |
-| `serde_json` | 1.0 | JSON parsing |
-| `toml` | 1.1 | TOML configuration files |
-| `clap` | 4.6 | Command-line argument parsing |
-| `tracing` | 0.1 | Structured logging |
-| `tokio-rustls` | 0.26 | TLS support (Rustls) |
-| `hickory-resolver` | 0.26 | DNS resolution (SRV records) |
-| `thiserror` | 2.0 | Error type derivation |
-| `anyhow` | 1.0 | Error handling |
+[cols=",,",options="header",]
+|===
+|Crate |Version |Purpose
+|`+tokio+` |1.52 |Async runtime and I/O
+|`+serde+` |1.0 |Serialization/deserialization
+|`+serde_json+` |1.0 |JSON parsing
+|`+toml+` |1.1 |TOML configuration files
+|`+clap+` |4.6 |Command-line argument parsing
+|`+tracing+` |0.1 |Structured logging
+|`+tokio-rustls+` |0.26 |TLS support (Rustls)
+|`+hickory-resolver+` |0.26 |DNS resolution (SRV records)
+|`+thiserror+` |2.0 |Error type derivation
+|`+anyhow+` |1.0 |Error handling
+|===
 
-### Deno Dependencies (vext-tools)
+==== Deno Dependencies (vext-tools)
 
-| Module | Source | Purpose |
-|--------|--------|---------|
-| `@std/path` | JSR | Path manipulation |
-| `@std/fs` | JSR | File system operations |
-| `@std/cli` | JSR | CLI argument parsing |
+[cols=",,",options="header",]
+|===
+|Module |Source |Purpose
+|`+@std/path+` |JSR |Path manipulation
+|`+@std/fs+` |JSR |File system operations
+|`+@std/cli+` |JSR |CLI argument parsing
+|===
 
-## Architecture
+=== Architecture
 
-### vext-core (Rust Daemon)
+==== vext-core (Rust Daemon)
 
-```
+....
 ┌─────────────────────────────────────────────────────────┐
 │                       vextd                             │
 ├─────────────────────────────────────────────────────────┤
@@ -91,11 +87,11 @@ vext uses a hybrid architecture combining Rust for the high-performance daemon a
 │  │     Token Bucket Algorithm (per-server)      │       │
 │  └─────────────────────────────────────────────┘       │
 └─────────────────────────────────────────────────────────┘
-```
+....
 
-### vext-tools (Deno Hooks)
+==== vext-tools (Deno Hooks)
 
-```
+....
 ┌─────────────────────────────────────────────────────────┐
 │                    Git Repository                        │
 ├─────────────────────────────────────────────────────────┤
@@ -119,13 +115,14 @@ vext uses a hybrid architecture combining Rust for the high-performance daemon a
 └───────────────────┼─────────────────────────────────────┘
                     ▼
               vextd daemon
-```
+....
 
-## Communication Protocol
+=== Communication Protocol
 
-### JSON Notification Format
+==== JSON Notification Format
 
-```json
+[source,json]
+----
 {
   "to": ["ircs://server/channel"],
   "privmsg": "Message text",
@@ -136,22 +133,25 @@ vext uses a hybrid architecture combining Rust for the high-performance daemon a
   "url": "https://example.com/commit/abc1234",
   "colors": "mirc"
 }
-```
+----
 
-### IRC URL Schema
+==== IRC URL Schema
 
-| URL Format | Description |
-|------------|-------------|
-| `irc://server/channel` | Plain IRC (port 6667) |
-| `ircs://server/channel` | TLS IRC (port 6697) |
-| `irc://server:port/channel` | Custom port |
-| `irc://server/channel?key=pass` | Channel with key |
+[cols=",",options="header",]
+|===
+|URL Format |Description
+|`+irc://server/channel+` |Plain IRC (port 6667)
+|`+ircs://server/channel+` |TLS IRC (port 6697)
+|`+irc://server:port/channel+` |Custom port
+|`+irc://server/channel?key=pass+` |Channel with key
+|===
 
-## Build System
+=== Build System
 
-### Cargo (Rust)
+==== Cargo (Rust)
 
-```toml
+[source,toml]
+----
 [workspace]
 members = ["vext-core"]
 resolver = "2"
@@ -161,11 +161,12 @@ lto = true
 codegen-units = 1
 panic = "abort"
 strip = true
-```
+----
 
-### Deno (TypeScript)
+==== Deno (TypeScript)
 
-```json
+[source,json]
+----
 {
   "tasks": {
     "build": "deno check src/**/*.ts",
@@ -173,68 +174,72 @@ strip = true
     "hook:git": "deno run --allow-net --allow-env --allow-read src/hooks/git.ts"
   }
 }
-```
+----
 
-### Just (Task Runner)
+==== Just (Task Runner)
 
-Common tasks via [just](https://github.com/casey/just):
+Common tasks via https://github.com/casey/just[just]:
 
-```bash
+[source,bash]
+----
 just build      # Build all components
 just test       # Run all tests
 just lint       # Run linters
 just format     # Format code
 just validate   # Full CI check
-```
+----
 
-## Security Considerations
+=== Security Considerations
 
-### Rust (vext-core)
+==== Rust (vext-core)
 
-- Memory-safe by design
-- No unsafe code in critical paths
-- TLS enabled by default
-- Rate limiting prevents flood attacks
-- Sandboxed IRC commands (no arbitrary execution)
+* Memory-safe by design
+* No unsafe code in critical paths
+* TLS enabled by default
+* Rate limiting prevents flood attacks
+* Sandboxed IRC commands (no arbitrary execution)
 
-### Deno (vext-tools)
+==== Deno (vext-tools)
 
-- Explicit permission model
-- Only `--allow-net`, `--allow-read`, `--allow-env` required
-- No arbitrary file system access
-- URL imports verified by integrity checks
+* Explicit permission model
+* Only `+--allow-net+`, `+--allow-read+`, `+--allow-env+` required
+* No arbitrary file system access
+* URL imports verified by integrity checks
 
-## Platform Support
+=== Platform Support
 
-| Platform | vext-core | vext-tools |
-|----------|-----------|------------|
-| Linux x86_64 | Full | Full |
-| Linux ARM64 | Full | Full |
-| macOS x86_64 | Full | Full |
-| macOS ARM64 | Full | Full |
-| Windows | Partial | Full |
-| FreeBSD | Full | Partial |
+[cols=",,",options="header",]
+|===
+|Platform |vext-core |vext-tools
+|Linux x86_64 |Full |Full
+|Linux ARM64 |Full |Full
+|macOS x86_64 |Full |Full
+|macOS ARM64 |Full |Full
+|Windows |Partial |Full
+|FreeBSD |Full |Partial
+|===
 
-## Performance Characteristics
+=== Performance Characteristics
 
-### vext-core Daemon
+==== vext-core Daemon
 
-- **Memory**: ~5-10 MB base, ~1 MB per active connection
-- **CPU**: Minimal (async I/O, event-driven)
-- **Throughput**: 10,000+ notifications/second
-- **Latency**: <10ms notification to IRC send
+* *Memory*: ~5-10 MB base, ~1 MB per active connection
+* *CPU*: Minimal (async I/O, event-driven)
+* *Throughput*: 10,000+ notifications/second
+* *Latency*: <10ms notification to IRC send
 
-### Connection Pool
+==== Connection Pool
 
-- **Max Connections**: Configurable (default: 4 per server)
-- **Idle Timeout**: 5 minutes (configurable)
-- **Reconnection**: Automatic with exponential backoff
+* *Max Connections*: Configurable (default: 4 per server)
+* *Idle Timeout*: 5 minutes (configurable)
+* *Reconnection*: Automatic with exponential backoff
 
-## Development Dependencies
+=== Development Dependencies
 
-### Rust
+==== Rust
 
-```bash
+[source,bash]
+----
 # Testing
 cargo install cargo-tarpaulin  # Coverage
 cargo install cargo-audit      # Security audit
@@ -242,29 +247,30 @@ cargo install cargo-audit      # Security audit
 # Linting
 rustup component add clippy
 rustup component add rustfmt
-```
+----
 
-### Deno
+==== Deno
 
-Built-in tooling:
-- `deno fmt` - Code formatting
-- `deno lint` - Linting
-- `deno test` - Testing
-- `deno check` - Type checking
+Built-in tooling: - `+deno fmt+` - Code formatting - `+deno lint+` -
+Linting - `+deno test+` - Testing - `+deno check+` - Type checking
 
-## Migration from Python
+=== Migration from Python
 
 This project was migrated from Python to Rust + Deno for:
 
-1. **Performance**: Rust's async I/O handles more connections with less memory
-2. **Safety**: Memory safety and type safety reduce runtime errors
-3. **Deployment**: Single binary simplifies installation
-4. **Modern Tooling**: Deno provides better developer experience for scripting
-5. **Policy Compliance**: RSR (Rhodium Standard Repository) language requirements
+[arabic]
+. *Performance*: Rust’s async I/O handles more connections with less
+memory
+. *Safety*: Memory safety and type safety reduce runtime errors
+. *Deployment*: Single binary simplifies installation
+. *Modern Tooling*: Deno provides better developer experience for
+scripting
+. *Policy Compliance*: RSR (Rhodium Standard Repository) language
+requirements
 
-See `.migration/PYTHON_TO_RUST_RESCRIPT.md` for migration details.
+See `+.migration/PYTHON_TO_RUST_RESCRIPT.md+` for migration details.
 
-## License
+=== License
 
-- **SPDX Identifier**: `MIT OR MPL-2.0`
-- **Style**: Palimpsest dual licensing
+* *SPDX Identifier*: `+MIT OR MPL-2.0+`
+* *Style*: Palimpsest dual licensing

@@ -1,14 +1,11 @@
-<!--
-SPDX-License-Identifier: CC-BY-SA-4.0
-Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
--->
-# vext Usage Guide
+== vext Usage Guide
 
-## Quick Start
+=== Quick Start
 
-### 1. Start the Daemon
+==== 1. Start the Daemon
 
-```bash
+[source,bash]
+----
 # Start vext daemon with default settings
 irkerd
 
@@ -18,33 +15,37 @@ irkerd --foreground --debug
 # Or run as background service
 sudo systemctl start vext
 sudo systemctl status vext
-```
+----
 
-### 2. Send Your First Notification
+==== 2. Send Your First Notification
 
-```bash
+[source,bash]
+----
 # Send notification to IRC channel
 echo '{"to":"irc://irc.libera.chat/testchannel","privmsg":"Hello from vext!"}' | \
   nc -u 127.0.0.1 6659
-```
+----
 
-### 3. Configure Repository Hook
+==== 3. Configure Repository Hook
 
 For Git:
-```bash
+
+[source,bash]
+----
 # Copy example hook to repository
 cp irkerhook.py /path/to/repo.git/hooks/post-receive
 chmod +x /path/to/repo.git/hooks/post-receive
 
 # Edit to set IRC channel
 # Then make a commit to test!
-```
+----
 
-## Starting and Managing the Daemon
+=== Starting and Managing the Daemon
 
-### Command-Line Options
+==== Command-Line Options
 
-```bash
+[source,bash]
+----
 # Show help
 irkerd --help
 irkerd -h
@@ -75,11 +76,12 @@ irkerd --logfile /var/log/vext/vext.log
 
 # Combine options
 irkerd --listen 0.0.0.0 --port 6659 --debug --foreground
-```
+----
 
-### Systemd Service Management
+==== Systemd Service Management
 
-```bash
+[source,bash]
+----
 # Start daemon
 sudo systemctl start vext
 
@@ -105,11 +107,12 @@ sudo systemctl disable vext
 sudo journalctl -u vext -f              # Follow logs
 sudo journalctl -u vext -n 50           # Last 50 lines
 sudo journalctl -u vext -S "1 hour ago" # Last hour
-```
+----
 
-### Manual Service Management
+==== Manual Service Management
 
-```bash
+[source,bash]
+----
 # Start in background (manual)
 irkerd --pidfile /var/run/vext.pid --logfile /var/log/vext/vext.log &
 
@@ -122,21 +125,23 @@ pkill -f irkerd
 # Check if running
 pgrep -f irkerd
 ps aux | grep irkerd
-```
+----
 
-## Sending Notifications
+=== Sending Notifications
 
-### Basic Notification
+==== Basic Notification
 
-```bash
+[source,bash]
+----
 # Simple message to single channel
 echo '{"to":"irc://irc.libera.chat/commits","privmsg":"New commit pushed!"}' | \
   nc -u localhost 6659
-```
+----
 
-### Multi-Channel Notification
+==== Multi-Channel Notification
 
-```bash
+[source,bash]
+----
 # Send to multiple channels in one request
 echo '{
   "to": [
@@ -145,11 +150,12 @@ echo '{
   ],
   "privmsg": "Major release v1.2.0 published!"
 }' | nc -u localhost 6659
-```
+----
 
-### With Color Formatting
+==== With Color Formatting
 
-```bash
+[source,bash]
+----
 # ANSI color codes
 echo '{
   "to": "irc://irc.libera.chat/commits",
@@ -163,22 +169,24 @@ echo '{
   "privmsg": "[abc123d] Alice: Fix critical bug",
   "color": "mIRC"
 }' | nc -u localhost 6659
-```
+----
 
-### Custom Bot Nickname
+==== Custom Bot Nickname
 
-```bash
+[source,bash]
+----
 # Override default bot nick
 echo '{
   "to": "irc://irc.libera.chat/commits",
   "privmsg": "Notification message",
   "nick": "my-custom-bot"
 }' | nc -u localhost 6659
-```
+----
 
-### Using Python Script
+==== Using Python Script
 
-```python
+[source,python]
+----
 #!/usr/bin/env python3
 import json
 import socket
@@ -207,19 +215,21 @@ send_notification(
 )
 
 print("Notification sent!")
-```
+----
 
-### Using TCP Instead of UDP
+==== Using TCP Instead of UDP
 
-```bash
+[source,bash]
+----
 # TCP is more reliable but slightly slower
 echo '{"to":"irc://irc.libera.chat/commits","privmsg":"Important message"}' | \
   nc localhost 6659  # nc without -u uses TCP
-```
+----
 
-### Using Bash Script
+==== Using Bash Script
 
-```bash
+[source,bash]
+----
 #!/bin/bash
 
 # Configuration
@@ -249,15 +259,16 @@ EOF
 send_irc_notification "Build started for commit abc123d"
 send_irc_notification "Build completed successfully" "announcements"
 send_irc_notification "Deployment to production failed" "alerts"
-```
+----
 
-## Repository Hook Configuration
+=== Repository Hook Configuration
 
-### Git Configuration
+==== Git Configuration
 
-#### Basic Git Hook
+===== Basic Git Hook
 
-```python
+[source,python]
+----
 #!/usr/bin/env python3
 """
 Git post-receive hook for vext notifications
@@ -348,11 +359,12 @@ while True:
         print(f"Error processing push: {e}", file=sys.stderr)
 
 print("Git hook executed successfully")
-```
+----
 
-#### Advanced Git Hook with Environment Configuration
+===== Advanced Git Hook with Environment Configuration
 
-```python
+[source,python]
+----
 #!/usr/bin/env python3
 """
 Advanced Git hook with configuration file support
@@ -423,11 +435,12 @@ def send_notification(message):
 
 # Process commits...
 # (same as basic example)
-```
+----
 
-### Mercurial Configuration
+==== Mercurial Configuration
 
-```python
+[source,python]
+----
 #!/usr/bin/env python3
 """
 Mercurial hook for vext notifications
@@ -470,11 +483,12 @@ def notify(ui, repo, **kwargs):
         sock.close()
     except Exception as e:
         ui.write(f"Error sending notification: {e}\n")
-```
+----
 
-### Subversion Configuration
+==== Subversion Configuration
 
-```bash
+[source,bash]
+----
 #!/bin/bash
 # SVN post-commit hook
 # Save as: /path/to/repo/hooks/post-commit
@@ -509,13 +523,14 @@ EOF
 echo "$PAYLOAD" | nc -u "$VEXT_HOST" "$VEXT_PORT"
 
 exit 0
-```
+----
 
-## Configuration Management
+=== Configuration Management
 
-### Environment Variables
+==== Environment Variables
 
-```bash
+[source,bash]
+----
 # Set in shell or systemd service
 export IRKERD_HOST=0.0.0.0
 export IRKERD_PORT=6659
@@ -524,11 +539,12 @@ export IRKERD_COLOR_MODE=ANSI
 export IRKERD_USE_TCP=false
 export IRKERD_LOGLEVEL=INFO
 export IRKERD_LOGFILE=/var/log/vext/vext.log
-```
+----
 
-### Configuration File (.vext.conf)
+==== Configuration File (.vext.conf)
 
-```ini
+[source,ini]
+----
 [daemon]
 host = 0.0.0.0
 port = 6659
@@ -545,11 +561,12 @@ timeout = 120
 color_mode = ANSI
 rate_limit = 2
 flood_limit = 1000
-```
+----
 
-### Per-Repository Configuration (.vext-repo.conf)
+==== Per-Repository Configuration (.vext-repo.conf)
 
-```ini
+[source,ini]
+----
 [vext]
 host = localhost
 port = 6659
@@ -558,13 +575,14 @@ port = 6659
 server = irc.libera.chat
 channel = #myproject
 color = ANSI
-```
+----
 
-## Monitoring and Troubleshooting
+=== Monitoring and Troubleshooting
 
-### Check Daemon Status
+==== Check Daemon Status
 
-```bash
+[source,bash]
+----
 # Is daemon running?
 ps aux | grep irkerd
 pgrep -f irkerd
@@ -576,22 +594,24 @@ ss -tlnp | grep 6659
 # Recent activity in logs?
 tail -f /var/log/vext/vext.log
 journalctl -u vext -f
-```
+----
 
-### Test IRC Connectivity
+==== Test IRC Connectivity
 
-```bash
+[source,bash]
+----
 # Can you reach the IRC server?
 ping irc.libera.chat
 telnet irc.libera.chat 6667
 
 # Check with nc
 echo -n "" | nc -w 5 irc.libera.chat 6667
-```
+----
 
-### Debug Hook Execution
+==== Debug Hook Execution
 
-```bash
+[source,bash]
+----
 # Test hook manually
 cd /path/to/repo.git
 python3 hooks/post-receive <<< "0000000000000000000000000000000000000000 abc123 refs/heads/main"
@@ -602,12 +622,14 @@ python3 -u hooks/post-receive 2>&1 | tee hook-debug.log
 # Check hook permissions
 ls -la hooks/post-receive
 # Should be: -rwxr-xr-x (755)
-```
+----
 
-### Common Issues and Solutions
+==== Common Issues and Solutions
 
-**Issue: Notifications not appearing in IRC**
-```bash
+*Issue: Notifications not appearing in IRC*
+
+[source,bash]
+----
 # 1. Check daemon is running
 systemctl status vext
 
@@ -620,10 +642,12 @@ echo '{"to":"irc://irc.libera.chat/testchannel","privmsg":"test"}' | \
 
 # 4. Check firewall
 sudo ufw status
-```
+----
 
-**Issue: Hook script not executing**
-```bash
+*Issue: Hook script not executing*
+
+[source,bash]
+----
 # 1. Check permissions
 ls -la /path/to/repo.git/hooks/post-receive
 # Should be executable (x)
@@ -637,10 +661,12 @@ head -1 /path/to/repo.git/hooks/post-receive
 
 # 4. Check git config
 cat /path/to/repo.git/config
-```
+----
 
-**Issue: Connection refused**
-```bash
+*Issue: Connection refused*
+
+[source,bash]
+----
 # 1. Check daemon port
 sudo ss -tlnp | grep 6659
 
@@ -649,13 +675,14 @@ IRKERD_PORT=6660 irkerd --foreground
 
 # 3. Check firewall
 sudo ufw allow 6659
-```
+----
 
-## Advanced Usage
+=== Advanced Usage
 
-### Rotating Logs
+==== Rotating Logs
 
-```bash
+[source,bash]
+----
 # Manual rotation
 sudo systemctl stop vext
 sudo mv /var/log/vext/vext.log /var/log/vext/vext.log.1
@@ -672,11 +699,12 @@ cat > /etc/logrotate.d/vext << 'EOF'
     create 0640 irker irker
 }
 EOF
-```
+----
 
-### High-Availability Setup
+==== High-Availability Setup
 
-```bash
+[source,bash]
+----
 # Primary daemon
 irkerd --listen 0.0.0.0 --port 6659 &
 
@@ -688,40 +716,44 @@ echo '{"to":"irc://irc.libera.chat/commits","privmsg":"msg"}' | \
   nc -u localhost 6659 &
 echo '{"to":"irc://irc.libera.chat/commits","privmsg":"msg"}' | \
   nc -u localhost 6660
-```
+----
 
-### Rate Limiting and Batching
+==== Rate Limiting and Batching
 
-```bash
+[source,bash]
+----
 # Configure rate limits to prevent IRC flooding
 IRKERD_RATE_LIMIT=2         # 2 messages per second
 IRKERD_FLOOD_LIMIT=1000     # 1000 messages per minute
 
 irkerd --foreground --debug
-```
+----
 
-## Performance Tuning
+=== Performance Tuning
 
-### Memory Optimization
+==== Memory Optimization
 
-```bash
+[source,bash]
+----
 # Monitor daemon memory usage
 watch -n 1 'ps aux | grep irkerd | grep -v grep'
 
 # Limit memory usage (if needed)
 # Use cgroups or systemd unit configuration
-```
+----
 
-### Connection Pooling
+==== Connection Pooling
 
-```bash
+[source,bash]
+----
 # Daemon automatically pools IRC connections
 # Configure thread pool size in config:
 [daemon]
 threads = 4  # Adjust based on number of channels
-```
+----
 
-## Conclusion
+=== Conclusion
 
-vext provides flexible, powerful IRC notifications for your repositories. Start with the basic examples and expand based on your specific needs. For more information, see [README.md](README.md) and [FEATURES.md](FEATURES.md).
-
+vext provides flexible, powerful IRC notifications for your
+repositories. Start with the basic examples and expand based on your
+specific needs. For more information, see README.md and FEATURES.md.
