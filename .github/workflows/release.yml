@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 # This workflow is managed by gh actions-lock.
+# This workflow is managed by gh actions-lock.
 # SPDX-FileCopyrightText: 2025 hyperpolymath
 
 name: Release
@@ -47,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@6d9817901c499d6b02debbb57edb38d33daa680b # stable
+        uses: dtolnay/rust-toolchain@v1
         with:
           targets: ${{ matrix.target }}
       - name: Install cross
@@ -90,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@6d9817901c499d6b02debbb57edb38d33daa680b # stable
+        uses: dtolnay/rust-toolchain@v1
       - name: Install cargo-deb
         run: cargo install cargo-deb
       - name: Build .deb
@@ -109,7 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@6d9817901c499d6b02debbb57edb38d33daa680b # stable
+        uses: dtolnay/rust-toolchain@v1
       - name: Install cargo-generate-rpm
         run: cargo install cargo-generate-rpm
       - name: Build binary
