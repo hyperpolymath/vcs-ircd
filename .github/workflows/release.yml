@@ -145,7 +145,7 @@ jobs:
           find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" -o -name "*.sha256" -o -name "*.deb" -o -name "*.rpm" \) -exec cp {} release/ \;
           ls -la release/
       - name: Create Release
-        uses: softprops/action-gh-release@v3.0.2
+        uses: softprops/action-gh-release@v3.0.3
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           files: release/*
