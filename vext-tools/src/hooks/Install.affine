@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module Install;
+
 // SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 // vext hook installer
 // Installs git hooks for vext notifications.
@@ -5,7 +10,7 @@
 open Deno
 open Std
 
-let hookTemplate = `#!/bin/sh
+fn hookTemplate = `#!/bin/sh
 # vext post-receive hook
 # Sends commit notifications to IRC via vextd
 #
@@ -21,29 +26,29 @@ exec deno run --allow-net --allow-env --allow-read \\
 `
 
 // Find git directory
-let findGitDir = async (): option<string> => {
-  let cmd = Command.make("git", {
+fn findGitDir = async (): option<string> => {
+  fn cmd = Command.make("git", {
     args: ["rev-parse", "--git-dir"],
     stdout: "piped",
     stderr: "null",
   })
-  let output = await cmd->Command.output
+  fn output = await cmd->Command.output
   if !output.success {
     None
   } else {
-    let decoder = TextDecoder.make()
+    fn decoder = TextDecoder.make()
     Some(decoder->TextDecoder.decode(output.stdout)->String.trim)
   }
 }
 
 // Install the hook
-let installHook = async (gitDir: string, hookPath: string, force: bool): bool => {
-  let hooksDir = Path.join(gitDir, "hooks")
-  let targetPath = Path.join(hooksDir, "post-receive")
+fn installHook = async (gitDir: string, hookPath: string, force: bool): bool => {
+  fn hooksDir = Path.join(gitDir, "hooks")
+  fn targetPath = Path.join(hooksDir, "post-receive")
 
   // Check if hook already exists
   try {
-    let _ = await stat(targetPath)
+    fn _ = await stat(targetPath)
     if !force {
       Console.error(`Hook already exists: ${targetPath}`)
       Console.error("Use --force to overwrite")
@@ -56,7 +61,7 @@ let installHook = async (gitDir: string, hookPath: string, force: bool): bool =>
   await Fs.ensureDir(hooksDir)
 
   // Generate hook content
-  let content = hookTemplate->String.replaceAll("HOOK_PATH", hookPath)
+  fn content = hookTemplate->String.replaceAll("HOOK_PATH", hookPath)
 
   await writeTextFile(targetPath, content)
   await chmod(targetPath, 0o755)
@@ -66,7 +71,7 @@ let installHook = async (gitDir: string, hookPath: string, force: bool): bool =>
 }
 
 // Show help
-let showHelp = () => {
+fn showHelp = () => {
   Console.log(`vext hook installer
 
 Usage: Install.res.mjs [options]
@@ -83,20 +88,20 @@ Example:
 }
 
 // Main entry point
-let main = async () => {
-  let args = Deno.args
+fn main = async () => {
+  fn args = Deno.args
 
   // Check for help flag
-  let showHelpFlag = args->Array.some(a => a == "--help" || a == "-h")
+  fn showHelpFlag = args->Array.some(a => a == "--help" || a == "-h")
   if showHelpFlag {
     showHelp()
     exit(0)
   }
 
   // Parse arguments
-  let gitDirArg = ref(None)
-  let hookPathArg = ref(None)
-  let forceFlag = ref(false)
+  fn gitDirArg = ref(None)
+  fn hookPathArg = ref(None)
+  fn forceFlag = ref(false)
 
   args->Array.forEachWithIndex((arg, i) => {
     if arg == "--git-dir" {
@@ -111,7 +116,7 @@ let main = async () => {
   })
 
   // Find git directory
-  let gitDir = switch gitDirArg.contents {
+  fn gitDir = switch gitDirArg.contents {
   | Some(d) => d
   | None =>
     switch await findGitDir() {
@@ -124,7 +129,7 @@ let main = async () => {
   }
 
   // Find hook script path
-  let hookPath = switch hookPathArg.contents {
+  fn hookPath = switch hookPathArg.contents {
   | Some(p) => p
   | None =>
     // Default to Git.res.mjs in the same directory
@@ -133,10 +138,10 @@ let main = async () => {
   }
 
   // Install the hook
-  let success = await installHook(gitDir, hookPath, forceFlag.contents)
+  fn success = await installHook(gitDir, hookPath, forceFlag.contents)
 
   if success {
-    let postReceivePath = Path.join3(gitDir, "hooks", "post-receive")
+    fn postReceivePath = Path.join3(gitDir, "hooks", "post-receive")
     Console.log(`
 Hook installed successfully!
 
@@ -155,8 +160,8 @@ Or edit the hook file directly:
 }
 
 // Run main
-let _ = main()->Promise.catch(err => {
-  let msg = switch err {
+fn _ = main()->Promise.catch(err => {
+  fn msg = switch err {
   | Js.Exn.Error(e) => Js.Exn.message(e)->Option.getOr("unknown")
   | _ => "unknown error"
   }
@@ -164,3 +169,4 @@ let _ = main()->Promise.catch(err => {
   exit(1)
   Promise.resolve()
 })
+

@@ -1,17 +1,22 @@
+// SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module Deno;
+
 // SPDX-License-Identifier: MPL-2.0 OR MPL-2.0
 // ReScript bindings for Deno runtime APIs
 
 // Deno.Command for executing commands
 module Command = {
-  type t
+  struct t
 
-  type commandOptions = {
+  struct commandOptions { {
     args: array<string>,
     stdout: string,
     stderr: string,
   }
 
-  type output = {
+  struct output { {
     success: bool,
     stdout: Js.TypedArray2.Uint8Array.t,
     stderr: Js.TypedArray2.Uint8Array.t,
@@ -23,9 +28,9 @@ module Command = {
 
 // Deno.connect for network connections
 module Net = {
-  type conn
+  struct conn
 
-  type connectOptions = {
+  struct connectOptions { {
     hostname: string,
     port: int,
   }
@@ -37,7 +42,7 @@ module Net = {
 
 // Deno.stdin
 module Stdin = {
-  type t
+  struct t
 
   @module("Deno") @val external stdin: t = "stdin"
   @send external read: (t, Js.TypedArray2.Uint8Array.t) => promise<Js.Nullable.t<int>> = "read"
@@ -61,14 +66,14 @@ module Env = {
 
 // TextEncoder/TextDecoder
 module TextEncoder = {
-  type t
+  struct t
 
   @new external make: unit => t = "TextEncoder"
   @send external encode: (t, string) => Js.TypedArray2.Uint8Array.t = "encode"
 }
 
 module TextDecoder = {
-  type t
+  struct t
 
   @new external make: unit => t = "TextDecoder"
   @send external decode: (t, Js.TypedArray2.Uint8Array.t) => string = "decode"
@@ -79,3 +84,4 @@ module Console = {
   @val external log: string => unit = "console.log"
   @val external error: string => unit = "console.error"
 }
+
