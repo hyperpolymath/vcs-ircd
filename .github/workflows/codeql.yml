@@ -18,7 +18,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 permissions: read-all
-  actions: read
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
